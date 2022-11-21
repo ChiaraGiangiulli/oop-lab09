@@ -53,7 +53,7 @@ public final class ConcurrentGUI extends JFrame {
 
         private volatile boolean stop;
         private int counter;
-        boolean upCount = true;
+        private volatile boolean upCount = true;
         
         @Override
         public void run() {
@@ -61,13 +61,7 @@ public final class ConcurrentGUI extends JFrame {
                 try {
                     final var nextText = Integer.toString(this.counter);
                     SwingUtilities.invokeAndWait(() -> ConcurrentGUI.this.display.setText(nextText));
-                    if(upCount){
-                        this.counter++;
-                    }
-                    else{
-                        this.counter--;
-                    }
-                    
+                    counter = (upCount == true)? counter + 1 : counter - 1;
                     Thread.sleep(100);
                 } catch (InvocationTargetException | InterruptedException ex) {
                     ex.printStackTrace();
